@@ -1,0 +1,677 @@
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --sidebar:#1F1F1F;
+  --sidebar-border:rgba(255,255,255,0.07);
+  --main:#1F1F1F;
+  --card:#fff;
+  --card-border:rgba(0,0,0,0.07);
+  --text:#1a1a1a;
+  --text2:#666;
+  --text3:#aaa;
+  --purple50:#EEEDFE;--purple200:#AFA9EC;--purple400:#7F77DD;--purple600:#534AB7;--purple800:#3C3489;
+  --teal50:#E1F5EE;--teal200:#5DCAA5;--teal400:#1D9E75;--teal600:#0F6E56;--teal800:#085041;
+  --coral50:#FAECE7;--coral200:#F0997B;--coral400:#D85A30;--coral600:#993C1D;--coral800:#712B13;
+  --blue50:#E6F1FB;--blue200:#85B7EB;--blue400:#378ADD;--blue600:#185FA5;--blue800:#0C447C;
+  --amber50:#FAEEDA;--amber400:#EF9F27;--amber600:#854F0B;
+  --gray50:#F1EFE8;--gray400:#888780;--gray800:#2C2C2A;
+  --green50:#EAF3DE;--green400:#1D9E75;--green800:#085041;
+  --red400:#E24B4A;--red600:#A32D2D;
+}
+html,body,#root{height:100%;}
+html,body{font-family:'Geist',system-ui,sans-serif;background:var(--main);color:var(--text);}
+.app{display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:220px;flex-shrink:0;background:#1F1F1F;display:flex;flex-direction:column;overflow:hidden;padding-top:12px;}
+.sb-logo{padding:18px 16px 14px;display:flex;align-items:center;gap:10px;}
+.sb-logo-icon{width:28px;height:28px;background:var(--purple400);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sb-logo-icon svg{width:14px;height:14px;}
+.sb-logo-text{font-size:14px;font-weight:600;color:#fff;letter-spacing:-0.01em;}
+.sb-logo-sub{font-size:10px;color:rgba(255,255,255,0.3);margin-top:1px;}
+.sb-section{padding:22px 14px 4px;font-size:9px;letter-spacing:0.1em;color:rgba(255,255,255,0.25);text-transform:uppercase;font-weight:500;}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 10px;margin:1px 8px;border-radius:8px;cursor:pointer;font-size:12.5px;color:rgba(255,255,255,0.45);transition:all 0.15s;user-select:none;}
+.sb-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.75);}
+.sb-item.active{background:rgba(255,255,255,0.1);color:#fff;}
+.sb-item svg{width:17px;height:17px;flex-shrink:0;opacity:0.8;}
+.sb-item.active svg{opacity:1;}
+.sb-divider{height:0.5px;background:var(--sidebar-border);margin:8px 14px;}
+.sb-bottom{margin-top:auto;padding:10px 8px;}
+.sb-store{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;}
+.sb-avatar{width:28px;height:28px;border-radius:50%;background:var(--purple400);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0;}
+.sb-name{font-size:12px;font-weight:500;color:rgba(255,255,255,0.75);}
+.sb-plan{font-size:10px;color:rgba(255,255,255,0.28);}
+.online-dot{width:6px;height:6px;border-radius:50%;background:#5DCAA5;margin-left:auto;flex-shrink:0;}
+.sb-logout{display:flex;align-items:center;gap:8px;padding:6px 10px;margin-top:2px;border-radius:7px;text-decoration:none;color:rgba(255,255,255,0.3);font-size:11.5px;transition:all 0.15s;}
+.sb-logout:hover{background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;background:#1F1F1F;padding:12px 12px 12px 0;}
+.main-inner{flex:1;display:flex;flex-direction:column;background:#f5f5f7;border-radius:14px;overflow:hidden;min-height:0;}
+.topbar{background:#f5f5f7;border-bottom:0.5px solid rgba(0,0,0,0.07);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:48px;flex-shrink:0;}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+.topbar-title{font-size:15px;font-weight:500;color:var(--text);}
+.topbar-right{display:flex;align-items:center;gap:6px;}
+.btn-period{padding:4px 11px;font-size:11.5px;border:0.5px solid rgba(0,0,0,0.12);border-radius:6px;cursor:pointer;background:#fff;color:var(--text2);font-family:inherit;transition:background 0.28s cubic-bezier(.4,0,.2,1),color 0.28s cubic-bezier(.4,0,.2,1),border-color 0.28s cubic-bezier(.4,0,.2,1),transform 0.18s cubic-bezier(.4,0,.2,1);}
+.btn-period:active{transform:scale(0.96);}
+.btn-period:hover{border-color:rgba(0,0,0,0.25);color:var(--text);}
+.btn-period.active{background:#1F1F1F;color:#fff;border-color:#1F1F1F;}
+/* smooth cross-fade/slide when swapping topbar control groups */
+.tb-swap{transition:opacity 0.26s cubic-bezier(.4,0,.2,1),transform 0.26s cubic-bezier(.4,0,.2,1);}
+.tb-swap.out{opacity:0;transform:translateX(8px);pointer-events:none;}
+.tb-swap.in-left{opacity:0;transform:translateX(-8px);}
+/* segmented toggle buttons (mode/range switches) */
+.seg-btn{transition:background 0.28s cubic-bezier(.4,0,.2,1),color 0.28s cubic-bezier(.4,0,.2,1),font-weight 0.2s;}
+.seg-btn:active{transform:scale(0.97);}
+.notif-btn{width:30px;height:30px;border-radius:7px;border:0.5px solid rgba(0,0,0,0.1);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,border-color 0.2s;}
+.notif-btn:hover{background:#fafafa;border-color:rgba(0,0,0,0.2);}
+.notif-btn.on{background:#1F1F1F;border-color:#1F1F1F;}
+.notif-btn.on svg{color:#fff;}
+.notif-btn svg{width:14px;height:14px;color:var(--text2);transition:color 0.2s;}
+.notif-wrap{position:relative;}
+.notif-pop{position:absolute;top:38px;right:0;width:250px;background:#fff;border-radius:11px;border:0.5px solid rgba(0,0,0,0.09);box-shadow:0 14px 40px -12px rgba(0,0,0,0.22);z-index:200;opacity:0;transform:translateY(-6px) scale(0.97);pointer-events:none;transition:opacity 0.2s cubic-bezier(.4,0,.2,1),transform 0.2s cubic-bezier(.4,0,.2,1);transform-origin:top right;}
+.notif-pop.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+.notif-pop-head{padding:11px 14px 9px;border-bottom:0.5px solid rgba(0,0,0,0.06);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:#aaa;}
+.notif-pop-body{padding:26px 16px;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;}
+.notif-pop-body svg{opacity:0.22;}
+.notif-empty{font-size:12.5px;color:#999;}
+
+.content{flex:1;overflow-y:auto;padding:16px 20px;background:#f5f5f7;}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* CARDS & GRIDS */
+.g1{display:grid;gap:12px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.g4-3{display:grid;grid-template-columns:1fr 1fr 1fr 1.4fr;gap:12px;}
+.card{background:var(--card);border-radius:10px;border:0.5px solid var(--card-border);padding:14px 16px;}
+.card-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:10px;}
+
+/* KPI CARDS */
+.kpi{border-radius:10px;padding:12px 14px;border:0.5px solid transparent;}
+.kpi-label{font-size:10.5px;margin-bottom:5px;font-weight:400;}
+.kpi-val{font-size:20px;font-weight:500;letter-spacing:-0.02em;line-height:1;}
+.kpi-delta{font-size:10px;margin-top:5px;display:flex;align-items:center;gap:3px;}
+.kpi-delta.up{color:var(--teal600);}
+.kpi-delta.dn{color:var(--coral600);}
+.kpi.purple{background:var(--purple50);border-color:var(--purple200);}.kpi.purple .kpi-label{color:var(--purple600);}.kpi.purple .kpi-val{color:var(--purple800);}
+.kpi.teal{background:var(--teal50);border-color:var(--teal200);}.kpi.teal .kpi-label{color:var(--teal600);}.kpi.teal .kpi-val{color:var(--teal800);}
+.kpi.coral{background:var(--coral50);border-color:var(--coral200);}.kpi.coral .kpi-label{color:var(--coral600);}.kpi.coral .kpi-val{color:var(--coral800);}
+.kpi.blue{background:var(--blue50);border-color:var(--blue200);}.kpi.blue .kpi-label{color:var(--blue600);}.kpi.blue .kpi-val{color:var(--blue800);}
+.kpi.gray{background:var(--gray50);border-color:#D3D1C7;}.kpi.gray .kpi-label{color:#5F5E5A;}.kpi.gray .kpi-val{color:var(--gray800);}
+
+/* TABLE ROWS */
+.tr{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,0.05);font-size:12px;}
+.tr:last-child{border-bottom:none;}
+.tr-name{color:var(--text2);}
+.tr-val{font-weight:500;color:var(--text);}
+.tr.total-row{padding-top:8px;margin-top:4px;border-top:0.5px solid rgba(0,0,0,0.1);border-bottom:none;font-size:13px;font-weight:500;}
+.badge{font-size:10px;padding:2px 7px;border-radius:5px;font-weight:400;}
+.badge-up{background:var(--teal50);color:var(--teal800);}
+.badge-dn{background:var(--coral50);color:var(--coral800);}
+.badge-warn{background:var(--amber50);color:var(--amber600);}
+.badge-neutral{background:var(--gray50);color:#5F5E5A;}
+.bar-mini{height:3px;background:#EEEDFE;border-radius:2px;margin-top:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:2px;background:var(--purple400);}
+
+/* STARS */
+.stars{color:var(--amber400);font-size:12px;}
+
+/* CHARTS */
+.chart-wrap{position:relative;width:100%;}
+
+/* FORMS */
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:12px;color:var(--text2);}
+.field input{padding:6px 10px;font-size:13px;border:0.5px solid rgba(0,0,0,0.14);border-radius:7px;background:#fff;color:var(--text);font-family:inherit;}
+.field input:focus{outline:none;border-color:var(--purple400);box-shadow:0 0 0 2px rgba(127,119,221,0.12);}
+.calc-btn{width:100%;padding:8px;border-radius:8px;border:0.5px solid rgba(127,119,221,0.4);background:var(--purple50);color:var(--purple800);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;margin-top:10px;transition:all 0.12s;}
+.calc-btn:hover{background:var(--purple200);color:var(--purple800);}
+/* Стрелки-спиннеры у числовых полей не нужны нигде: значения вводятся вручную,
+   а кликер только сбивает вёрстку узких полей вроде процента себестоимости. */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;appearance:none;margin:0;}
+input[type=number]{-moz-appearance:textfield;appearance:textfield;}
+
+/* VERDICT */
+.verdict{border-radius:9px;padding:11px 13px;margin-top:10px;}
+.verdict.good{background:var(--teal50);border:0.5px solid var(--teal200);}
+.verdict.bad{background:var(--coral50);border:0.5px solid var(--coral200);}
+.verdict.warn{background:var(--amber50);border:0.5px solid #FAC775;}
+.verdict .v-title{font-size:12.5px;font-weight:500;}
+.verdict.good .v-title{color:var(--teal800);}
+.verdict.bad .v-title{color:var(--coral800);}
+.verdict.warn .v-title{color:var(--amber600);}
+.verdict .v-sub{font-size:11px;margin-top:3px;}
+.verdict.good .v-sub{color:var(--teal600);}
+.verdict.bad .v-sub{color:var(--coral600);}
+.verdict.warn .v-sub{color:var(--amber600);}
+
+/* RATING BAR */
+.rbar-track{height:5px;background:rgba(0,0,0,0.06);border-radius:3px;overflow:hidden;width:100px;}
+.rbar-fill{height:100%;border-radius:3px;}
+
+/* SETTINGS */
+.settings-input{width:100%;padding:7px 11px;font-size:13px;border:0.5px solid rgba(0,0,0,0.14);border-radius:8px;background:#fff;color:var(--text);font-family:inherit;margin-top:4px;}
+.settings-input:focus{outline:none;border-color:var(--purple400);}
+.action-btn{padding:7px 14px;border-radius:7px;border:0.5px solid rgba(0,0,0,0.14);background:#fff;font-size:12px;cursor:pointer;font-family:inherit;color:var(--text2);}
+.action-btn:hover{border-color:rgba(0,0,0,0.25);color:var(--text);}
+
+/* PRODUCT TABLE */
+.ptable{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed;}
+.ptable th{text-align:left;padding:7px 8px;font-size:11.5px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;border-bottom:0.5px solid rgba(0,0,0,0.08);}
+.ptable td{padding:9px 8px;border-bottom:0.5px solid rgba(0,0,0,0.04);color:var(--text);vertical-align:middle;}
+.ptable tr:last-child td{border-bottom:none;}
+.ptable tr:hover td{background:rgba(0,0,0,0.015);}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;font-size:11px;color:var(--text2);}
+.legend-item{display:flex;align-items:center;gap:5px;}
+.legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
+
+/* MB helpers */
+.mb8{margin-bottom:8px;}
+.mb12{margin-bottom:12px;}
+.mb16{margin-bottom:16px;}
+.mt8{margin-top:8px;}
+.mt12{margin-top:12px;}
+.sep{height:0.5px;background:rgba(0,0,0,0.07);margin:10px 0;}
+
+/* ALERT TAG */
+.alert-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--coral50);border-radius:8px;margin-bottom:6px;font-size:12px;}
+.alert-row .a-name{color:var(--coral800);font-weight:400;}
+
+/* QuickSell AI — liquid glass insight card */
+/* Рамка плоская, как в прототипе. Градиент на краю даёт не border, а ::after —
+   светлая полоска по верхней грани; ::before добавляет диагональный блик.
+   Двухслойный фон с border-box тут не годится: стекло полупрозрачное, и нижний
+   слой просвечивает сквозь всю карточку, а не только по рамке. */
+.qs-ai{position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(155deg,rgba(249,249,251,0.72),rgba(237,237,241,0.44));backdrop-filter:blur(26px) saturate(1.2);-webkit-backdrop-filter:blur(26px) saturate(1.2);border:1px solid rgba(127,119,221,0.4);box-shadow:inset 0 1px 1px rgba(255,255,255,0.9), 0 0 0 2px rgba(127,119,221,0.05), 0 0 12px -3px rgba(127,119,221,0.2), 0 8px 26px -14px rgba(127,119,221,0.18);}
+.qs-ai::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,0.55) 0%,rgba(255,255,255,0) 42%);z-index:0;}
+.qs-ai::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.9),transparent);z-index:1;}
+.qs-ai-tag{position:absolute;top:14px;left:18px;font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#7F77DD;text-shadow:0 0 8px rgba(127,119,221,0.45);z-index:2;}
+.qs-ai-body{position:relative;z-index:2;padding:16px 18px;}
+.qs-ai-sec{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:#7a7a82;margin-bottom:5px;position:relative;z-index:2;}
+/* Строго после .qs-ai-sec: специфичность у них одинаковая, и порядок решает,
+   каким будет цвет у элемента с обоими классами. Выше — серый победит. */
+.qs-ai-brand{color:#7F77DD;text-shadow:0 0 8px rgba(127,119,221,0.45);}
+.qs-ai-text{font-size:12.5px;color:#2f2f38;line-height:1.85;position:relative;z-index:2;}
+.qs-ai-div{height:0.5px;background:rgba(0,0,0,0.09);margin:12px 0;position:relative;z-index:2;}
+/* цифры-таблетки внутри AI-текста */
+.ai-num{display:inline-block;font-weight:500;padding:0 6px;border-radius:5px;font-size:0.92em;line-height:1.5;white-space:nowrap;}
+.ai-num.up{background:#E1F5EE;color:#085041;}
+.ai-num.dn{background:#FAECE7;color:#712B13;}
+.ai-num.neu{background:#EEEDFE;color:#534AB7;}
+
+/* Подсветка незаполненных полей при пропуске онбординга */
+@keyframes fieldPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,159,39,0);}50%{box-shadow:0 0 0 4px rgba(239,159,39,0.18);}}
+.field-need{border-color:#EF9F27 !important;background:#FFFDF6 !important;animation:fieldPulse 1.8s ease-in-out 3;}
+.field-need::placeholder{color:#D08A2E;}
+
+/* Иконка «i» с подсказкой */
+.info-hint{position:relative;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;border:1px solid rgba(127,119,221,0.5);color:#7F77DD;font-size:10px;font-weight:600;cursor:help;flex-shrink:0;outline:none;}
+.info-hint .info-pop{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);width:264px;background:#1F1F1F;color:rgba(255,255,255,0.85);font-size:11.5px;font-weight:400;line-height:1.6;padding:9px 11px;border-radius:8px;box-shadow:0 14px 40px -12px rgba(0,0,0,0.35);opacity:0;pointer-events:none;transition:opacity 0.18s,transform 0.18s;z-index:50;text-align:left;text-transform:none;letter-spacing:normal;}
+.info-hint:hover .info-pop,.info-hint:focus-visible .info-pop{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Баннер «Завершите подключение магазина» */
+.setup-banner{background:linear-gradient(135deg,#FDF4E3,#FAEEDA);border:0.5px solid #EF9F27;border-radius:10px;padding:13px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;}
+.setup-banner .sb-icon{width:34px;height:34px;border-radius:9px;background:#fff;border:0.5px solid #FAC775;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.setup-banner .sb-title{font-size:13px;font-weight:500;color:#854F0B;}
+.setup-banner .sb-text{font-size:11.5px;color:#A9711E;margin-top:1px;}
+.setup-banner .sb-close{background:none;border:none;cursor:pointer;color:#B8823A;padding:4px;flex-shrink:0;display:flex;}
+
+/* ─── FREEMIUM: бейджи, замки, upsell ─── */
+.pro-badge{font-size:9.5px;font-weight:600;letter-spacing:0.04em;background:linear-gradient(135deg,#7F77DD,#9F99EE);color:#fff;padding:2px 7px;border-radius:5px;vertical-align:middle;}
+.pro-badge-sm{font-size:8.5px;font-weight:600;background:linear-gradient(135deg,#7F77DD,#9F99EE);color:#fff;padding:1px 5px;border-radius:4px;margin-left:5px;vertical-align:middle;letter-spacing:0.03em;}
+
+/* Блок с размытым содержимым и оверлеем-замком.
+   Растягивается на всю высоту карточки — иначе оверлей центрируется только по
+   высоте содержимого и «уезжает» вверх, оставляя пустоту снизу. */
+.lock-block{position:relative;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;flex:1;min-height:150px;}
+.lock-block .lb-content{filter:blur(5px);user-select:none;pointer-events:none;opacity:0.65;flex:1;}
+.lock-block .lb-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:linear-gradient(180deg,rgba(255,255,255,0.15),rgba(255,255,255,0.78) 55%);text-align:center;padding:16px;}
+.lb-lock{width:38px;height:38px;border-radius:11px;background:#fff;border:0.5px solid rgba(127,119,221,0.2);box-shadow:0 8px 22px -12px rgba(127,119,221,0.4);display:flex;align-items:center;justify-content:center;}
+.lb-title{font-size:13px;font-weight:500;color:#1a1a1a;}
+.lb-sub{font-size:11.5px;color:#8478c9;max-width:250px;line-height:1.5;}
+.lb-corner-pro{position:absolute;top:12px;right:14px;font-size:9px;font-weight:600;background:linear-gradient(135deg,#7F77DD,#9F99EE);color:#fff;padding:2px 7px;border-radius:5px;letter-spacing:0.03em;z-index:5;}
+.lb-btn{margin-top:4px;background:#7F77DD;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;transition:background 0.15s;}
+.lb-btn:hover{background:#534AB7;}
+
+/* Карточка целиком под замком: содержимое вместе с заголовком размывается,
+   поверх — оверлей. Значения блюра — как в прототипе (.mode-free .free-hide). */
+.free-hide{position:relative;}
+.free-hide.is-locked > *:not(.free-lock-over){filter:blur(4px);opacity:0.5;pointer-events:none;user-select:none;}
+.free-lock-over{display:flex;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:16px;cursor:pointer;z-index:4;}
+/* «Матовый» замок — как .lock-block в прототипе («Точки роста»): блюр чуть
+   сильнее и белая градиентная подложка, из-за которой размытие выглядит как
+   матовое стекло. overflow:hidden держит подложку внутри скругления. */
+.free-hide.is-frost{overflow:hidden;}
+.free-hide.is-frost.is-locked > *:not(.free-lock-over){filter:blur(5px);opacity:0.65;}
+.free-hide.is-frost .free-lock-over{gap:8px;background:linear-gradient(180deg,rgba(255,255,255,0.15),rgba(255,255,255,0.78) 55%);}
+
+/* AI-карточка под замком: минимальная высота, чтобы замок, заголовок и кнопка
+   не наезжали друг на друга поверх короткого текста */
+.qs-ai.is-locked{min-height:150px;}
+.qs-ai.is-locked > *:not(.qs-ai-lock){filter:blur(4px);opacity:0.5;pointer-events:none;user-select:none;}
+.qs-ai-lock{display:flex;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:16px;cursor:pointer;z-index:4;}
+
+/* Заблокированные строки таблицы + upsell-строка */
+.locked-row td{color:#c4c4c4 !important;}
+.locked-row .mbadge{background:#f2f2f2 !important;color:#c9c9c9 !important;}
+.locked-row .sharebar-fill{background:#e0e0e0 !important;}
+.mini-lock{display:inline-flex;align-items:center;gap:5px;color:#aaa;}
+.mini-lock svg{flex-shrink:0;}
+.upsell-inner{background:linear-gradient(135deg,rgba(127,119,221,0.07),rgba(175,169,236,0.12));border:0.5px solid rgba(127,119,221,0.25);border-radius:9px;padding:12px 14px;margin:8px 2px 2px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color 0.15s;}
+.upsell-inner:hover{border-color:rgba(127,119,221,0.5);}
+.upsell-inner .u-txt{flex:1;}
+.upsell-inner .u-t1{font-size:12.5px;font-weight:500;color:#3C3489;}
+.upsell-inner .u-t2{font-size:11.5px;color:#7166c9;margin-top:1px;}
+.upsell-btn{background:#7F77DD;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;white-space:nowrap;transition:background 0.15s;flex-shrink:0;}
+.upsell-btn:hover{background:#534AB7;}
+
+/* Юнит-экономика: плашка лимита бесплатных расчётов — как в прототипе: светлый
+   лиловый фон без обводки, иконка, одна строка текста и кнопка справа */
+.ue-limit{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(127,119,221,0.07),rgba(175,169,236,0.12));border-radius:10px;padding:11px 16px;margin-bottom:10px;}
+.ue-limit .ue-icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ue-limit .ue-txt{flex:1;min-width:0;}
+.ue-limit .ue-t1{font-size:13px;font-weight:500;color:#3C3489;}
+/* Кнопка «Рассчитать», когда бесплатные попытки кончились — становится CTA на Pro */
+.ue-cta{width:100%;padding:10px;border-radius:8px;border:none;background:linear-gradient(135deg,#7F77DD,#6C63D1);color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;transition:filter 0.15s;}
+.ue-cta:hover{filter:brightness(0.93);}
+.ue-left{font-size:11.5px;color:#8a86a8;text-align:center;margin-top:8px;}
+.ue-left b{font-weight:500;color:#534AB7;}
+
+/* Модалка апгрейда */
+.upgrade-modal{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(20,20,20,0.5);backdrop-filter:blur(3px);}
+.um-card{background:#fff;border-radius:16px;padding:28px 30px;max-width:400px;width:90%;text-align:center;box-shadow:0 30px 80px -20px rgba(0,0,0,0.4);}
+.um-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#EEEDFE,#DED9FB);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+.um-title{font-size:18px;font-weight:600;color:#1a1a1a;margin-bottom:6px;letter-spacing:-0.01em;}
+.um-sub{font-size:13px;color:#888;line-height:1.6;margin-bottom:18px;}
+.um-btn{width:100%;padding:12px;border-radius:10px;border:none;background:#7F77DD;color:#fff;font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:background 0.15s;}
+.um-btn:hover{background:#534AB7;}
+.um-close{margin-top:10px;background:none;border:none;color:#aaa;font-size:12.5px;cursor:pointer;font-family:inherit;}
+.um-close:hover{color:#666;}
+
+/* Тепловая карта заказов по дням текущей недели */
+.heat-week{display:flex;align-items:flex-end;gap:5px;}
+.heat-day{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;min-width:0;}
+.heat-cell{width:100%;height:34px;border-radius:8px;border:1px solid transparent;transition:transform 0.12s;cursor:default;display:flex;align-items:center;justify-content:center;}
+.heat-cell:hover{transform:scale(1.04);}
+/* День ещё не наступил — пунктир вместо заливки, чтобы не читался как ноль продаж */
+.heat-cell.future{background:transparent;border:1px dashed rgba(0,0,0,0.16);}
+/* Сегодня всегда обведён, даже если продаж ещё не было */
+.heat-cell.today{border-color:#A9A2EA;}
+/* Количество заказов проявляется на самом блоке при наведении */
+.heat-count{font-size:11px;font-weight:500;color:#4B4B55;opacity:0;transition:opacity 0.12s;}
+.heat-cell:hover .heat-count{opacity:1;}
+.heat-label{font-size:9px;color:#bbb;white-space:nowrap;}
+.heat-label.today{color:#7F77DD;font-weight:500;}
+.heat-tip{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:2px;background:#333;color:#fff;font-size:11px;line-height:1.2;padding:5px 9px;border-radius:5px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.12s;z-index:5;}
+.heat-day:hover .heat-tip{opacity:1;}
+
+/* Разворот таблицы товаров на весь экран */
+.prod-fs{position:fixed;inset:0;z-index:10002;display:flex;flex-direction:column;background:#f4f4f6;padding:20px 24px;}
+/* Без верхнего padding: sticky-шапка липнет к top:0 скролл-контейнера, и любой
+   отступ над ней превращался бы в щель, в которой видны проезжающие строки */
+.prod-fs-body{flex:1;overflow-y:auto;background:#fff;border-radius:12px;border:0.5px solid rgba(0,0,0,0.07);padding:0 18px 18px;}
+/* border-bottom у sticky-строки не рисуется стабильно — тень надёжнее */
+.prod-fs-body thead tr{box-shadow:0 0.5px 0 rgba(0,0,0,0.08);}
+.prod-fs-close{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;background:#fff;cursor:pointer;transition:background 0.15s;}
+.prod-fs-close:hover{background:#fafafa;}
+/* Квадратная иконка-кнопка 32×32 — в одну линию с фильтрами и поиском */
+.icon-btn-32{display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;border:0.5px solid rgba(0,0,0,0.12);border-radius:7px;background:#fff;cursor:pointer;transition:background 0.15s;}
+.icon-btn-32:hover{background:#fafafa;}
+
+/* Collapsible search — square icon button that expands into an input */
+.search-field{display:flex;align-items:center;height:28px;width:28px;flex-shrink:0;border:0.5px solid rgba(0,0,0,0.12);border-radius:7px;background:#fafafa;overflow:hidden;transition:width 0.26s cubic-bezier(.4,0,.2,1),background 0.2s,border-color 0.2s,box-shadow 0.2s;}
+.search-field.open{width:190px;background:#fff;border-color:rgba(127,119,221,0.45);box-shadow:0 0 0 2px rgba(127,119,221,0.12);}
+.search-field .sf-btn{width:27px;height:27px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0;border:none;background:none;cursor:pointer;color:#888;transition:color 0.15s;}
+.search-field .sf-btn:hover{color:var(--text);}
+.search-field.open .sf-btn{color:#7F77DD;}
+.search-field .sf-input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:inherit;font-size:12px;color:var(--text);padding:0 9px 0 0;opacity:0;transition:opacity 0.18s;}
+.search-field .sf-input::placeholder{color:#ccc;}
+.search-field.open .sf-input{opacity:1;}
+.search-field:not(.open) .sf-input{pointer-events:none;}
+
+/* Карточка, у которой итоговая строка прижата к низу */
+.fill-card{display:flex;flex-direction:column;}
+.fill-card .card-foot{margin-top:auto;}
+
+/* Clickable dashboard-style cards */
+.act-card{cursor:pointer;transition:transform 0.12s, box-shadow 0.12s, border-color 0.12s;border:0.5px solid rgba(0,0,0,0.08);}
+.act-card:hover{transform:translateY(-1px);box-shadow:0 6px 18px -8px rgba(0,0,0,0.18);border-color:rgba(127,119,221,0.45);}
+.act-card:active{transform:translateY(0);}
+
+/* AUTH SCREEN (utility classes still used by SettingsPage forms) */
+.auth-error{font-size:12px;color:#993C1D;background:#FAECE7;border:0.5px solid #F0997B;border-radius:8px;padding:8px 12px;margin-bottom:12px;}
+.auth-submit{width:100%;padding:10px;border-radius:8px;border:none;background:#1F1F1F;color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;margin-top:6px;transition:opacity .15s;}
+.auth-submit:hover{opacity:.85;}
+.auth-submit:disabled{opacity:.5;cursor:not-allowed;}
+
+/* AUTH SCREEN (register wizard + login) */
+#auth-screen{position:fixed;inset:0;z-index:9999;display:flex;font-family:'Geist',system-ui,sans-serif;}
+
+.auth-left{flex:1;background:#f4f4f6;display:flex;align-items:center;justify-content:center;padding:40px 24px;overflow-y:auto;}
+.auth-form-wrap{width:100%;max-width:420px;}
+.auth-card{background:#fff;border-radius:14px;border:0.5px solid rgba(0,0,0,0.07);padding:30px 34px;}
+.auth-card.auth-shake{animation:auth-shake 0.22s ease;}
+@keyframes auth-shake{0%{transform:translateX(0);}25%{transform:translateX(-6px);}50%{transform:translateX(6px);}75%{transform:translateX(-4px);}100%{transform:translateX(0);}}
+.auth-logo-sm{display:flex;align-items:center;gap:8px;margin-bottom:22px;}
+.auth-title{font-size:20px;font-weight:500;color:#1a1a1a;letter-spacing:-0.01em;margin-bottom:16px;}
+.auth-sub{font-size:13px;color:#aaa;margin-bottom:22px;}
+
+.auth-steps{display:flex;align-items:center;gap:6px;margin-bottom:22px;}
+.astep{flex:1;height:3px;border-radius:2px;background:#eee;transition:background 0.25s;}
+.astep.done{background:#7F77DD;}
+.astep-label{font-size:11px;color:#aaa;margin-bottom:18px;}
+.astep-label b{color:#534AB7;font-weight:500;}
+
+.auth-field{display:flex;flex-direction:column;gap:5px;margin-bottom:13px;}
+.auth-field label{font-size:12px;font-weight:500;color:#555;}
+.auth-field input{padding:10px 12px;font-size:13px;font-family:inherit;border:0.5px solid rgba(0,0,0,0.14);border-radius:8px;background:#fff;color:#1a1a1a;outline:none;transition:border-color 0.15s,box-shadow 0.15s;width:100%;}
+.auth-field input:focus{border-color:#7F77DD;box-shadow:0 0 0 3px rgba(127,119,221,0.1);}
+.auth-field input::placeholder{color:#ccc;}
+.auth-hint{font-size:11px;color:#bbb;margin-top:3px;line-height:1.5;}
+.pw-wrap{position:relative;}
+.pw-wrap input{padding-right:38px;}
+.pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:2px;color:#ccc;display:flex;align-items:center;}
+.pw-toggle:hover{color:#888;}
+.sbars{display:flex;gap:3px;margin-top:6px;}
+.sbar{flex:1;height:3px;border-radius:2px;background:#f0f0f0;transition:background 0.2s;}
+.pw-hint{font-size:11px;color:#bbb;margin-top:4px;}
+
+.auth-btn{width:100%;padding:11px;font-size:13.5px;font-weight:500;font-family:inherit;background:#1F1F1F;color:#fff;border:none;border-radius:9px;cursor:pointer;transition:opacity 0.15s;margin-top:4px;}
+.auth-btn:hover{opacity:0.85;}
+.auth-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.auth-btn.purple{background:#7F77DD;}
+.auth-btn.purple:hover{background:#534AB7;opacity:1;}
+.auth-back{background:none;border:none;cursor:pointer;font-family:inherit;font-size:12px;color:#aaa;padding:0;margin-top:12px;display:flex;align-items:center;gap:4px;}
+.auth-back:hover{color:#555;}
+.auth-switch{text-align:center;margin-top:18px;font-size:12.5px;color:#aaa;}
+.auth-switch a{color:#7F77DD;text-decoration:none;font-weight:500;cursor:pointer;}
+.auth-switch a:hover{text-decoration:underline;}
+.auth-terms{font-size:11px;color:#bbb;text-align:center;margin-top:14px;line-height:1.6;}
+.auth-terms a{color:#aaa;text-decoration:none;}
+.skip-link{font-size:11.5px;color:#aaa;text-align:center;margin-top:10px;cursor:pointer;display:block;}
+.skip-link:hover{color:#555;text-decoration:underline;}
+
+/* Plan cards — step 4 */
+.plan-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:6px;}
+.plan-opt{border:0.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:16px 18px;cursor:pointer;transition:all 0.15s;position:relative;background:#fff;}
+.plan-opt:hover{border-color:#AFA9EC;}
+.plan-opt.selected{border-color:#7F77DD;box-shadow:0 0 0 3px rgba(127,119,221,0.1);background:#FDFCFF;}
+.plan-opt .po-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;padding-right:28px;}
+.plan-opt .po-name{font-size:13px;font-weight:500;color:#1a1a1a;}
+.plan-opt .po-badge{font-size:10px;padding:2px 8px;border-radius:5px;background:#E1F5EE;color:#085041;}
+.plan-opt .po-price{font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#1a1a1a;}
+.plan-opt .po-price .per{font-size:12px;color:#aaa;font-weight:400;}
+.plan-opt .po-desc{font-size:11.5px;color:#888;margin-top:4px;line-height:1.5;}
+.plan-opt .po-radio{position:absolute;top:16px;right:16px;width:16px;height:16px;border-radius:50%;border:1.5px solid #ddd;transition:all 0.15s;}
+.plan-opt.selected .po-radio{border-color:#7F77DD;background:#7F77DD;box-shadow:inset 0 0 0 3px #fff;}
+
+/* Правая панель — тёмная инфо-панель */
+.auth-right{width:460px;flex-shrink:0;background:#1F1F1F;display:flex;flex-direction:column;padding:40px 40px;position:relative;overflow:hidden;overflow-y:auto;}
+.auth-right::before{content:'';position:absolute;top:-120px;left:-80px;width:340px;height:340px;background:radial-gradient(circle,rgba(127,119,221,0.16) 0%,transparent 70%);pointer-events:none;}
+.auth-right::after{content:'';position:absolute;bottom:-60px;right:-60px;width:260px;height:260px;background:radial-gradient(circle,rgba(29,158,117,0.09) 0%,transparent 70%);pointer-events:none;}
+.ar-inner{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;}
+.ar-pane{display:flex;flex-direction:column;flex:1;}
+.ar-tagline{font-size:23px;font-weight:500;color:#fff;line-height:1.3;letter-spacing:-0.02em;margin-bottom:10px;}
+.ar-tagline span{color:#a095ff;}
+.ar-sub{font-size:12.5px;color:rgba(255,255,255,0.45);line-height:1.6;margin-bottom:26px;}
+
+.ar-steps{display:flex;flex-direction:column;gap:4px;margin-bottom:26px;}
+.ar-step{display:flex;align-items:flex-start;gap:11px;padding:9px 11px;border-radius:9px;transition:background 0.2s;}
+.ar-step.now{background:rgba(127,119,221,0.12);}
+.ar-step .num{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4);}
+.ar-step.now .num{background:#7F77DD;color:#fff;}
+.ar-step.past .num{background:rgba(29,158,117,0.2);color:#5DCAA5;}
+.ar-step .st-title{font-size:12.5px;font-weight:500;color:rgba(255,255,255,0.5);}
+.ar-step.now .st-title{color:#fff;}
+.ar-step .st-sub{font-size:10.5px;color:rgba(255,255,255,0.28);margin-top:1px;}
+
+.ar-visual{margin-top:auto;background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;}
+.ar-visual .v-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.3);margin-bottom:12px;}
+
+.mini-mock{background:#f7f6f3;border-radius:8px;padding:10px;font-size:9px;color:#1a1a1a;}
+.mm-kpis{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;}
+.mm-kpi{background:#fff;border-radius:6px;padding:7px 9px;border:0.5px solid rgba(0,0,0,0.06);}
+.mm-kpi .l{font-size:7.5px;color:#aaa;text-transform:uppercase;letter-spacing:0.05em;}
+.mm-kpi .v{font-size:12px;font-weight:600;margin-top:2px;}
+.mm-bars{display:flex;align-items:flex-end;gap:4px;height:38px;background:#fff;border-radius:6px;padding:6px 8px;border:0.5px solid rgba(0,0,0,0.06);}
+.mm-bars>div{flex:1;border-radius:2px 2px 0 0;background:#C5C1EC;}
+
+/* Инструкция где взять токен */
+.token-guide{display:flex;flex-direction:column;gap:10px;}
+.tg-step{display:flex;gap:10px;align-items:flex-start;}
+.tg-num{width:18px;height:18px;border-radius:50%;background:rgba(127,119,221,0.2);color:#a095ff;font-size:9.5px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.tg-text{font-size:11.5px;color:rgba(255,255,255,0.6);line-height:1.5;}
+.tg-text b{color:rgba(255,255,255,0.9);font-weight:500;}
+
+.kaspi-mock{background:#fff;border-radius:8px;overflow:hidden;font-size:8.5px;color:#1a1a1a;margin-top:4px;}
+.km-top{background:#F03F35;padding:6px 10px;display:flex;align-items:center;gap:6px;}
+.km-top .kd{width:7px;height:7px;border-radius:50%;background:#fff;}
+.km-top span{color:#fff;font-weight:600;font-size:9px;}
+.km-nav{display:flex;gap:8px;margin-bottom:8px;font-size:8px;color:#999;}
+.km-row{display:flex;align-items:center;justify-content:space-between;background:#f8f8f8;border-radius:5px;padding:6px 8px;margin-bottom:4px;}
+.km-token{font-family:monospace;background:#EEEDFE;color:#534AB7;padding:3px 6px;border-radius:4px;font-size:8px;letter-spacing:0.02em;}
+.km-btn{background:#F03F35;color:#fff;border-radius:4px;padding:3px 8px;font-size:8px;font-weight:600;}
+
+.cab-link{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:500;color:#fff;background:rgba(127,119,221,0.25);border:0.5px solid rgba(127,119,221,0.5);padding:6px 12px;border-radius:7px;text-decoration:none;transition:background 0.15s;cursor:pointer;}
+.cab-link:hover{background:rgba(127,119,221,0.4);}
+.km-tabs{display:flex;gap:9px;font-size:7.5px;color:#999;border-bottom:0.5px solid rgba(0,0,0,0.08);padding:0 10px;}
+.km-tab{padding:6px 0 5px;white-space:nowrap;}
+.km-tab.on{color:#1a1a1a;font-weight:600;border-bottom:1.5px solid #F03F35;margin-bottom:-0.5px;}
+.km-token-row{display:flex;gap:6px;align-items:center;padding:9px 10px;}
+.km-token-field{flex:1;background:#f4f4f4;border-radius:5px;padding:5px 8px;font-family:monospace;font-size:7.5px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.km-copy{background:#4A90D9;color:#fff;border-radius:5px;padding:5px 10px;font-size:8px;font-weight:600;flex-shrink:0;}
+.km-sec{font-size:8.5px;font-weight:700;color:#1a1a1a;padding:7px 10px 3px;}
+.km-check{display:flex;align-items:center;gap:6px;padding:3px 10px;font-size:8px;color:#666;}
+.km-check .cb{width:10px;height:10px;border-radius:3px;border:1.2px solid #ccc;flex-shrink:0;background:#fff;}
+.km-check.checked{color:#1a1a1a;font-weight:600;}
+.km-check.checked .cb{background:#4A90D9;border-color:#4A90D9;position:relative;}
+.km-check.checked .cb::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:7px;font-weight:700;}
+.km-check.dim{color:#bbb;}
+.km-create{margin:7px 10px 9px;background:#4A90D9;color:#fff;border-radius:5px;padding:5px 0;font-size:8px;font-weight:600;text-align:center;}
+
+.sec-note{background:rgba(29,158,117,0.08);border:0.5px solid rgba(93,202,165,0.3);border-radius:10px;padding:12px 14px;margin-top:18px;}
+.sec-note .sn-title{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#5DCAA5;margin-bottom:5px;}
+.sec-note .sn-text{font-size:10.5px;color:rgba(255,255,255,0.5);line-height:1.6;}
+
+.value-list{display:flex;flex-direction:column;gap:8px;}
+.value-item{display:flex;gap:9px;align-items:flex-start;font-size:11.5px;color:rgba(255,255,255,0.6);line-height:1.5;}
+.value-item svg{width:13px;height:13px;flex-shrink:0;margin-top:2px;}
+
+/* Admin panel — clickable user rows */
+.admin-row:hover{background:rgba(0,0,0,0.025);}
+
+/* Подтверждение кода Kaspi (двухфакторка при подключении магазина) */
+.mfa-panel{display:flex;flex-direction:column;}
+.mfa-note{background:#F5F4FE;border:0.5px solid #C5C1EC;border-radius:8px;padding:10px 12px;margin-bottom:12px;}
+.mfa-note-title{font-size:12px;font-weight:500;color:#534AB7;margin-bottom:3px;}
+.mfa-note-text{font-size:11px;color:#6A62B8;line-height:1.55;}
+.mfa-note-text b{color:#3C3489;font-weight:500;}
+.mfa-label{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:11.5px;color:#444;margin-bottom:6px;}
+.mfa-ttl{font-size:10.5px;color:#aaa;white-space:nowrap;}
+.mfa-input{width:100%;padding:9px 12px;font-size:16px;letter-spacing:0.28em;font-family:inherit;font-variant-numeric:tabular-nums;border:1px solid rgba(127,119,221,0.5);border-radius:8px;background:#fff;color:#1a1a1a;outline:none;transition:border-color .15s,box-shadow .15s;}
+.mfa-input:focus{border-color:#7F77DD;box-shadow:0 0 0 3px rgba(127,119,221,0.12);}
+.mfa-input::placeholder{color:#c8c8cc;letter-spacing:0.28em;}
+.mfa-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px;}
+.mfa-link{background:none;border:none;padding:0;font-family:inherit;font-size:11.5px;color:#7F77DD;cursor:pointer;}
+.mfa-link:hover{color:#534AB7;}
+.mfa-link:disabled{color:#aaa;cursor:default;}
+.mfa-link.muted{color:#aaa;}
+.mfa-link.muted:hover{color:#666;}
+
+/* Разделы под замком до подключения магазина: приглушены, замок справа */
+.sb-item.locked{color:rgba(255,255,255,0.22);cursor:not-allowed;}
+.sb-item.locked:hover{background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.3);}
+.sb-item.locked svg:first-child{opacity:0.45;}
+.sb-item.locked > svg:last-child{margin-left:auto;width:12px;height:12px;opacity:0.55;}
+
+/* Модалка карточки товара (история себестоимости, показатели товара) */
+.qs-modal{position:fixed;inset:0;z-index:10003;display:flex;align-items:center;justify-content:center;background:rgba(20,20,20,0.5);backdrop-filter:blur(3px);padding:20px;}
+.qs-modal-card{background:#fff;border-radius:16px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,0.4);}
+.qs-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:22px 24px 0;}
+.qs-modal-title{font-size:19px;font-weight:600;color:#1a1a1a;letter-spacing:-0.01em;line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.qs-modal-close{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border:0.5px solid rgba(0,0,0,0.12);border-radius:8px;background:#fff;cursor:pointer;flex-shrink:0;transition:background .15s;}
+.qs-modal-close:hover{background:#fafafa;}
+.qs-modal-body{padding:18px 24px 24px;}
+.qs-btn-primary{border:none;background:#7F77DD;color:#fff;font-weight:500;font-family:inherit;cursor:pointer;white-space:nowrap;transition:background .15s;}
+.qs-btn-primary:hover{background:#534AB7;}
+.qs-btn-primary:disabled{opacity:.5;cursor:not-allowed;background:#7F77DD;}
+/* Название товара в таблице настроек открывает карточку */
+.sku-name-link{cursor:pointer;transition:color .12s;}
+.sku-name-link:hover{color:#534AB7;}
+.sku-gear{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border:0.5px solid rgba(0,0,0,0.12);border-radius:6px;background:#fff;cursor:pointer;margin-left:8px;vertical-align:middle;transition:background .15s;}
+.sku-gear:hover{background:#f5f5f5;}
+/* Строка товара открывает виджет показателей */
+.prod-row-click{cursor:pointer;transition:background .12s;}
+.prod-row-click:hover{background:#F7F6FF !important;}
+/* Разделы только что открылись — короткая фиолетовая вспышка */
+@keyframes sbUnlock{0%{background:rgba(127,119,221,0.28);color:#fff;}100%{background:transparent;color:rgba(255,255,255,0.45);}}
+.sb-item.unlocked{animation:sbUnlock 1.4s ease-out;}
+
+
+/* Сноска под таблицей — объяснение строк-исключений */
+.tbl-note{display:flex;gap:9px;align-items:flex-start;margin-top:12px;padding:9px 12px;background:#FFFBEB;border:0.5px solid #F5D98B;border-radius:8px;font-size:11.5px;color:#7A5A12;line-height:1.55;}
+.tbl-note b{font-weight:500;color:#5C430D;}
+.tbl-note-mark{color:#D08A2E;flex-shrink:0;}
+
+/* «Показать полностью» под свёрнутым AI-текстом */
+.qs-ai-more{position:relative;z-index:2;margin-top:4px;padding:0;background:none;border:none;font-family:inherit;font-size:11.5px;color:#7F77DD;cursor:pointer;}
+.qs-ai-more:hover{color:#534AB7;text-decoration:underline;}
+
+/* ─── Согласие с документами (регистрация, оплата) ─── */
+.consent{display:flex;align-items:flex-start;gap:9px;font-size:11.5px;line-height:1.55;color:#777;cursor:pointer;user-select:none;padding:9px 11px;border-radius:8px;border:0.5px solid transparent;transition:border-color .15s,background .15s;}
+.consent input{appearance:none;-webkit-appearance:none;flex-shrink:0;width:15px;height:15px;margin:1px 0 0;border:1px solid rgba(0,0,0,0.22);border-radius:4px;background:#fff;cursor:pointer;position:relative;transition:border-color .15s,background .15s;}
+.consent input:hover{border-color:#AFA9EC;}
+.consent input:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(127,119,221,0.18);}
+.consent input:checked{background:#7F77DD;border-color:#7F77DD;}
+.consent input:checked::after{content:'';position:absolute;left:4.5px;top:1.5px;width:4px;height:8px;border:solid #fff;border-width:0 1.8px 1.8px 0;transform:rotate(45deg);}
+.consent-link{color:#7F77DD;text-decoration:none;font-weight:500;}
+.consent-link:hover{color:#534AB7;text-decoration:underline;}
+/* Попытка продолжить без галочки */
+.consent.is-invalid{border-color:#F0997B;background:#FFF8F6;}
+.consent.is-invalid input{border-color:#E24B4A;}
+.consent.is-invalid input:checked{border-color:#7F77DD;}
+
+/* Название расчёта в карточке истории юнит-экономики — поле без рамки, как заголовок */
+.ue-name{flex:1;min-width:0;font-size:14px;font-weight:500;color:#1a1a1a;border:none;background:transparent;outline:none;font-family:inherit;padding:0;border-bottom:1px solid transparent;transition:border-color .15s;}
+.ue-name::placeholder{color:#bbb;font-weight:400;}
+.ue-name:hover{border-bottom-color:rgba(0,0,0,0.12);}
+.ue-name:focus{border-bottom-color:#7F77DD;}
+
+/* Сообщение-подтверждение в формах входа (например, письмо для смены пароля отправлено) */
+.auth-note{font-size:12.5px;color:#085041;background:#E1F5EE;border:0.5px solid rgba(93,202,165,0.5);border-radius:8px;padding:10px 12px;line-height:1.55;}
+
+/* Оплата Pro: условия и принимаемые карты — один блок, под ним разделитель */
+.checkout-terms{margin-top:16px;background:#FAFAFA;border:0.5px solid rgba(0,0,0,0.07);border-radius:10px;padding:3px 3px 10px;}
+.checkout-terms .consent{background:transparent;}
+.checkout-cards{display:flex;align-items:center;gap:12px;padding:2px 0 0 35px;}
+.checkout-cards img{display:block;}
+.checkout-div{height:0.5px;background:rgba(0,0,0,0.07);margin:14px 0;}
+.um-btn:disabled{opacity:.6;cursor:default;}
+
+/* Попап оплаты: форма FreedomPay во фрейме. На телефоне — во весь экран. */
+.pay-card{background:#fff;border-radius:16px;width:min(480px,94vw);height:min(720px,92dvh);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,0.4);}
+.pay-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 18px 12px;border-bottom:0.5px solid rgba(0,0,0,0.07);}
+.pay-title{font-size:15px;font-weight:600;color:#1a1a1a;}
+.pay-sub{font-size:12px;color:#999;margin-top:3px;line-height:1.45;}
+.pay-frame{flex:1;width:100%;border:0;display:block;background:#fff;}
+.pay-result-icon{width:52px;height:52px;margin:4px auto 0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:600;background:#E1F5EE;color:#085041;}
+.pay-result-icon.is-bad{background:#FCEBEB;color:#A32D2D;}
+/* Страница возврата из FreedomPay — видна внутри фрейма долю секунды */
+.pay-return{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center;font-size:14px;color:#555;background:#fff;}
+@media (max-width:640px){
+  .pay-card{width:100%;height:100dvh;border-radius:0;}
+}
+
+/* Экраны входа, регистрации и смены пароля на телефоне.
+   Боковая панель была 460px и не сжималась, поэтому на экране 390px форма
+   схлопывалась в полоску ~45px. Колонки встают одна под другой: форма первой,
+   панель — под ней. Прятать панель нельзя: на шагах 2–3 в ней инструкция,
+   как получить токен и создать пользователя Kaspi. */
+@media (max-width: 900px){
+  #auth-screen{flex-direction:column;overflow-y:auto;overflow-x:hidden;}
+  .auth-left{flex:none;overflow:visible;padding:24px 16px;}
+  /* overflow:hidden оставляем: декоративные круги-подсветки панели стоят с
+     отрицательными отступами и иначе дают сдвиг страницы вбок на 60px */
+  .auth-right{width:auto;flex:none;overflow:hidden;padding:28px 20px 32px;}
+  .auth-card{padding:22px 18px;}
+  /* iOS увеличивает страницу при фокусе на поле со шрифтом меньше 16px */
+  .auth-field input{font-size:16px;}
+}
+@media (max-width: 360px){
+  .auth-card{padding:18px 14px;}
+}
+
+/* ── Приложение на телефоне и узком планшете ──────────────────────────────
+   Раньше боковая панель занимала 220px из 390 и оставляла странице полоску
+   в 170px. Ниже 900px она становится выезжающим меню, страница — на всю ширину. */
+
+/* Кнопка меню и затемнение существуют только на узких экранах. */
+.tb-menu{display:none;align-items:center;justify-content:center;width:34px;height:34px;margin-left:-6px;border:none;background:none;color:var(--text);border-radius:8px;cursor:pointer;flex-shrink:0;}
+.tb-menu svg{width:18px;height:18px;}
+.tb-menu:active{background:rgba(0,0,0,0.06);}
+.sb-backdrop{display:none;}
+
+@media (max-width: 900px){
+  /* 100dvh: на iPhone 100vh выше видимой области, и низ уходил под панель браузера */
+  .app{height:100vh;height:100dvh;}
+  .sidebar{position:fixed;top:0;left:0;bottom:0;z-index:10001;width:264px;max-width:84vw;transform:translateX(-100%);transition:transform .22s ease;}
+  .sidebar.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,0.35);}
+  .sb-backdrop{display:block;position:fixed;inset:0;z-index:10000;background:rgba(20,20,20,0.45);}
+  .main{padding:0;}
+  .main-inner{border-radius:0;}
+  .tb-menu{display:flex;}
+  /* Шапка в две строки: заголовок с магазином, под ним — переключатели периода.
+     Листается вбок только блок переключателей: у колокольчика выпадающее окно,
+     и прокручиваемый родитель обрезал бы его. */
+  .topbar{height:auto;flex-wrap:wrap;gap:6px;padding:8px 12px;}
+  /* topbar-right растворяется (display:contents), чтобы колокольчик встал
+     в строку заголовка, а переключатели периода заняли всю ширину второй */
+  .topbar-left{min-width:0;flex:1;order:1;}
+  .topbar-right{display:contents;}
+  .notif-wrap{order:2;}
+  /* одно правило: второе с flex:1 молча перебивало перенос на новую строку */
+  #topbar-controls{order:3;flex:1 1 100%;min-width:0;overflow-x:auto;scrollbar-width:none;}
+  #topbar-controls::-webkit-scrollbar{display:none;}
+  /* Кнопки периода не сжимаются и не переносят «7 дней» на две строки;
+     чуть компактнее, чтобы все четыре влезали рядом с «Период / Отчёт» */
+  #topbar-controls > *, #topbar-controls button{flex-shrink:0;white-space:nowrap;}
+  #topbar-controls .tb-swap{margin-left:6px !important;}
+  #topbar-controls .btn-period{padding-left:6px;padding-right:6px;}
+  /* «Период / Отчёт» — отступы из инлайн-стиля segStyle, поэтому !important */
+  #topbar-controls .seg-btn{padding-left:9px !important;padding-right:9px !important;}
+  /* overflow-x:hidden — страница не должна уезжать вбок из-за невидимого
+     выступа (так делала скрытая подсказка теплокарты у правого края) */
+  .content{padding:12px;overflow-x:hidden;}
+  /* Таблицы листаются вбок, а не сжимают колонки до нечитаемых. min-width
+     обязателен: у таблиц товаров table-layout:fixed и ширина 100%, и без него
+     восемь колонок делили 358px — цифры налезали друг на друга. */
+  .content div:has(> table){overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .content table{min-width:680px;}
+  /* Подсказки теплокарты центрованы над днём; у крайних дней они вылезали за
+     экран. Первые два дня — от левого края, последние два — от правого. */
+  .heat-day:nth-child(-n+2) .heat-tip{left:0;transform:none;}
+  .heat-day:nth-last-child(-n+2) .heat-tip{left:auto;right:0;transform:none;}
+}
+
+@media (max-width: 640px){
+  /* Карточки в ряд встают друг под другом. Сетки заданы инлайн-стилями по всем
+     страницам, поэтому здесь !important. auto-fill-сетки (мелкие плитки) не
+     трогаем — они сами перестраиваются по ширине. */
+  .content [style*="grid-template-columns"]:not([style*="auto-fill"]){grid-template-columns:minmax(0,1fr) !important;}
+  .g2,.g3,.g4,.g4-3{grid-template-columns:minmax(0,1fr);}
+  /* Подсказка «ⓘ» центрована над иконкой и шириной 264px — у правого края
+     экрана она уходила за него. На телефоне — плашка внизу на всю ширину. */
+  /* «Аналитика готова на N%»: четыре галочки не сжимаются и оставляли тексту
+     ~150px. На телефоне галочки уходят отдельной строкой под полосу. */
+  .progress-banner{flex-wrap:wrap;row-gap:12px;}
+  .progress-banner > div:first-child{flex:1 1 100% !important;}
+  .progress-banner > div:first-child > div:first-child{flex-wrap:wrap;gap:2px 8px;}
+  .progress-banner > div:last-child{width:100%;justify-content:space-around;}
+  .info-hint .info-pop{position:fixed;left:16px;right:16px;bottom:16px;top:auto;width:auto;transform:translateY(4px);z-index:10005;}
+  .info-hint:hover .info-pop,.info-hint:focus-visible .info-pop{transform:none;}
+}

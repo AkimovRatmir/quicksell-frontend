@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.local
+
+# Инкрементальные артефакты tsc — генерируются при сборке и конфликтуют при слиянии
+*.tsbuildinfo
